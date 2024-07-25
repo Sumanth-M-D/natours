@@ -8,6 +8,7 @@ import handlerFactory from "./handlerFactory.js";
 import AppError from "../utils/appError.js";
 import User from "../models/userModel.js";
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 //.
 //? Getting the checkout session from stripe
 const getCheckoutSession = catchAsync(async function (req, res, next) {
@@ -15,7 +16,6 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
    const tour = await Tour.findById(req.params.tourId);
 
    //2. Create checkout-session
-   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
    const session = await stripe.checkout.sessions.create({
       // payment_method: ["card"],
       mode: "payment",
@@ -71,20 +71,20 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
 const createBookingCheckout = catchAsync(async function (sessionData) {
    console.log(sessionData);
    const tour = sessionData.client_reference_id;
-   const user = (await User.find({ email: sessionData.customer_email })).id;
-   const price = sessionData.line_items[0].price_data.unit_amount;
+   const user = (await User.findOne({ email: sessionData.customer_email })).id;
+   const price = sessionData.amount_total / 100;
 
    await Booking.create({ tour, user, price });
 });
 
-const webHookCheckout = async function (req, res, next) {
+const webHookCheckout = function (req, res, next) {
    const signature = req.headers["stripe-signature"];
    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
    let event;
 
    try {
-      event = Stripe.webhooks.constructEvent(
+      event = stripe.webhooks.constructEvent(
          req.body,
          signature,
          endpointSecret
@@ -95,7 +95,7 @@ const webHookCheckout = async function (req, res, next) {
 
    // Handle the event
    if (event.type === "checkout.session.completed")
-      await createBookingCheckout(event.data.object); /// Function to handle the event
+      createBookingCheckout(event.data.object); /// Function to handle the event
 
    // Return a 200 response to acknowledge receipt of the event
    res.status(200).json({ received: true });

@@ -28,7 +28,7 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
       cancel_url: `${req.protocol}://${req.get("host")}/tour/${tour.slug}`,
       customer_email: req.user.email,
       client_reference_id: req.params.tourId,
-      display_items: [
+      line_items: [
          {
             price_data: {
                currency: "usd",
@@ -68,13 +68,13 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
 //.
 //? Creating the booking on successful checkout => through webhooks [after deploying website]
 /// Hanlder function for the event => "checkout.session.completed"
-const createBookingCheckout = async function (sessionData) {
+const createBookingCheckout = catchAsync(async function (sessionData) {
    const tour = sessionData.client_reference_id;
    const user = (await User.find({ email: sessionData.customer_email })).id;
-   const price = sessionData.display_items[0].price_data.unit_amount;
+   const price = sessionData.line_items[0].price_data.unit_amount;
 
    await Booking.create({ tour, user, price });
-};
+});
 
 const webHookCheckout = function (req, res, next) {
    const signature = req.headers["stripe-signature"];

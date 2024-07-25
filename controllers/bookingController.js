@@ -36,7 +36,9 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
                   name: `${tour.name} Tour`,
                   description: tour.summary,
                   images: [
-                     `https://www.natours.dev/img/tours/${tour.imageCover}`,
+                     `${req.protocol}://${req.get("host")}/img/tours/${
+                        tour.imageCover
+                     }`,
                   ],
                },
                unit_amount: tour.price * 100, //Considers in cents
@@ -91,7 +93,7 @@ const webHookCheckout = function (req, res, next) {
    }
 
    // Handle the event
-   if ((event.type = "checkout.session.completed"))
+   if (event.type === "checkout.session.completed")
       createBookingCheckout(event.data.object); /// Function to handle the event
 
    // Return a 200 response to acknowledge receipt of the event

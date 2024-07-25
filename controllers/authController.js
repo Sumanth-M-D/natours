@@ -243,7 +243,6 @@ const forgotPassword = catchAsync(async function (req, res, next) {
       user.passwordResetToken = undefined;
       user.passwordResetExpiresAt = undefined;
       await user.save({ validateBeforeSave: false });
-      console.log(err);
       return next(
          new AppError(
             "There was an error sending an email. Try again later",

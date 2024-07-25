@@ -10,8 +10,6 @@ function setTourIdAndUserId(req, res, next) {
 
    /// Getting userId from authController.protect middleware run before this
    if (!req.body.user) req.body.user = req.user.id;
-
-   console.log(req.body);
    next();
 }
 

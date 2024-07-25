@@ -16,11 +16,10 @@ const bookTour = async function (tourId) {
          `/api/v1/bookings/checkout-session/${tourId}`
       );
 
-      console.log("checkout session sent");
       //2. Create checkout form and charge credit card
       stripe.redirectToCheckout({ sessionId: session.data.session.id });
    } catch (err) {
-      console.log(err);
+      // console.log(err);
       alertFunctions.showAlert("error", err);
    }
 };

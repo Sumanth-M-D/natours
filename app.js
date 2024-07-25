@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import compression from "compression";
 
 /// App security related modules
 import { rateLimit } from "express-rate-limit";
@@ -94,6 +95,8 @@ app.use(
    })
 );
 
+//? middleware for compression the text response from APIs
+app.use(compression());
 //.
 //? Mounting view (web-app) route
 app.use("/", viewRouter);
@@ -101,7 +104,7 @@ app.use("/", viewRouter);
 //.
 //? MOUNTING API ROUTES
 app.use("/api/v1/tours", tourRouter);
-app.use("/api/v1/users", userRouter); 
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/bookings", bookingRouter);
 

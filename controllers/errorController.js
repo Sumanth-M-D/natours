@@ -36,7 +36,6 @@ function handleJWTExpiredError() {
 //.
 //? To send error for development environment
 function sendErrorForDev(err, req, res) {
-   console.log(req.originalUrl);
    // 1. API
    if (req.originalUrl.startsWith("/api")) {
       return res.status(err.statusCode).json({

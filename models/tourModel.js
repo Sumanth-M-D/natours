@@ -176,7 +176,6 @@ tourSchema.virtual("reviews", {
 
 tourSchema.pre("save", function (next) {
    this.slug = slugify(this.name, { lower: true });
-   console.log(this);
    next();
 });
 
@@ -217,7 +216,7 @@ tourSchema.pre(/^find/, function (next) {
 //? query middleware ->trial
 tourSchema.post(/^find/, function (docs, next) {
    console.log(`Query Took ${Date.now() - this.start} miliseconds`);
-   /// console.log(docs);
+
    next();
 });
 

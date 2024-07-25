@@ -105,7 +105,6 @@ const getMe = function (req, res, next) {
 //.
 //? Updating Current user details
 const updateMe = catchAsync(async function (req, res, next) {
-   console.log(req.file, req.body);
    // 1. Create error if user POSTs password data for update
    if (req.body.password || req.body.passwordConfirm) {
       return next(

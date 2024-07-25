@@ -41,7 +41,7 @@ export const logout = async function () {
          location.reload(true); ///reload
       }
    } catch (err) {
-      console.log(err);
+      // console.log(err);
       alertFunctions.showAlert("error", "Error logging out! Try again.");
    }
 };

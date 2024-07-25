@@ -4,6 +4,8 @@
    "source": "./views/base.pug",
    "type": "module",
    "scripts": {
+      "preinstall": "apt-get update && apt-get install -y build-essential libvips-dev",
+      "install": "npm install",
       "start": "node server.js",
       "start:dev": "nodemon server.js",
       "start:prod": "SET NODE_ENV=production&&nodemon server.js",

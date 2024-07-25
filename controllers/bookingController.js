@@ -69,6 +69,7 @@ const getCheckoutSession = catchAsync(async function (req, res, next) {
 //? Creating the booking on successful checkout => through webhooks [after deploying website]
 /// Hanlder function for the event => "checkout.session.completed"
 const createBookingCheckout = catchAsync(async function (sessionData) {
+   console.log(sessionData);
    const tour = sessionData.client_reference_id;
    const user = (await User.find({ email: sessionData.customer_email })).id;
    const price = sessionData.line_items[0].price_data.unit_amount;
@@ -76,7 +77,7 @@ const createBookingCheckout = catchAsync(async function (sessionData) {
    await Booking.create({ tour, user, price });
 });
 
-const webHookCheckout = function (req, res, next) {
+const webHookCheckout = async function (req, res, next) {
    const signature = req.headers["stripe-signature"];
    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -94,7 +95,7 @@ const webHookCheckout = function (req, res, next) {
 
    // Handle the event
    if (event.type === "checkout.session.completed")
-      createBookingCheckout(event.data.object); /// Function to handle the event
+      await createBookingCheckout(event.data.object); /// Function to handle the event
 
    // Return a 200 response to acknowledge receipt of the event
    res.status(200).json({ received: true });

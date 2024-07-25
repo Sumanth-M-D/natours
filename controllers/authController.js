@@ -16,13 +16,14 @@ function signToken(id) {
 
 //.
 //? HELPER function => sending login
-function createSendToken(user, statusCode, res) {
+function createSendToken(user, statusCode, res, req) {
    const token = signToken(user._id);
    const cookieOptions = {
       expires: new Date(
          Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
       ), //miliseconds
       httpOnly: true, /// to make the cookie inchangable in the browser
+      // secure: req.secure,
    };
 
    if (process.env.NODE_ENV === "production") {
@@ -70,7 +71,7 @@ const signup = catchAsync(async function (req, res, next) {
    await new Email(newUser, url).sendWelcome();
 
    // If newuser is created then log him in -> (create and send JWT token)
-   createSendToken(newUser, 201, res);
+   createSendToken(newUser, 201, res, req);
 });
 
 //.
@@ -92,7 +93,7 @@ const login = catchAsync(async function (req, res, next) {
    }
 
    /// If everything is okay then login (i.e send the JWT token as response to client)
-   createSendToken(user, 200, res);
+   createSendToken(user, 200, res, req);
 });
 
 /* NOTE:-> 
@@ -283,7 +284,7 @@ const resetPassword = catchAsync(async function (req, res, next) {
    // 4. Log the user in send JWT
    const token = signToken(user._id);
 
-   createSendToken(user, 200, res);
+   createSendToken(user, 200, res, req);
 });
 
 //.
@@ -312,7 +313,7 @@ const updatePassword = catchAsync(async function (req, res, next) {
    await user.save();
 
    // 4. Log user in, send JWT token
-   createSendToken(user, 200, res);
+   createSendToken(user, 200, res, req);
 });
 
 //.

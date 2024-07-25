@@ -47,11 +47,15 @@ app.use(cookieParser());
 //.
 //.
 //? Global midldewares
-// 1. Body parsers (req.body)
+// 1. Cross origin middleware [Sets, Access-Control-Allow-Origin *]
+app.use(cors()); // ALlows only GET and POST
+app.options("*", cors()); // Allows all other HTTP requests
+
+// 2. Body parsers (req.body)
 app.use(Express.json({ limit: "20kb" })); /// to parse JSON bodies (from API requests)
 app.use(Express.urlencoded({ extended: true, limit: "20kb" })); /// Body parser urlencoded bodies (from forms of RENDERed website)
 
-// 2. Data loggers
+// 3. Data loggers
 if (process.env.NODE_ENV === "development") {
    app.use(morgan("dev"));
 
@@ -63,8 +67,6 @@ if (process.env.NODE_ENV === "development") {
    });
 }
 
-//3.
-/// app.use(cors());
 //.
 //? Using GLOBAL middlewares npm packages, for app security
 //1 .setting secure HTTP response headers.

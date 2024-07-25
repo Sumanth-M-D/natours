@@ -5,17 +5,19 @@ import bookingController from "../controllers/bookingController.js";
 
 const router = Express.Router();
 
-router.get(
-   "/",
-   bookingController.createBookingCheckout,
-   authController.isloggedIn,
-   viewsController.getOverview
-);
+router.get("/", authController.isloggedIn, viewsController.getOverview);
+
 router.get(`/tour/:slug`, authController.isloggedIn, viewsController.getTour);
 router.get("/login", authController.isloggedIn, viewsController.getLoginForm);
 router.get("/signUp", authController.isloggedIn, viewsController.getsignUpForm);
 router.get("/me", authController.protect, viewsController.getAccount);
-router.get("/my-tours", authController.protect, viewsController.getMyTours);
+
+router.get(
+   "/my-tours",
+   // bookingController.createBookingCheckout,
+   authController.protect,
+   viewsController.getMyTours
+);
 
 //? Stripe payment checkout page
 // router.post(

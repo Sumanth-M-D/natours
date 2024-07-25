@@ -26,6 +26,7 @@ import viewRouter from "./routes/viewRoutes.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import AppError from "./utils/appError.js";
 import globalErrorHandler from "./controllers/errorController.js";
+import bookingController from "./controllers/bookingController.js";
 
 //.
 
@@ -44,6 +45,14 @@ app.use(Express.static(`${__dirname}/public`));
 
 // To parse the cookie (for view)
 app.use(cookieParser());
+
+//.
+//? Stripe webHook checkout
+app.post(
+   "/webhook-checkout",
+   Express.raw({ type: "application/json" }),
+   bookingController.webHookCheckout
+);
 //.
 //.
 //? Global midldewares
@@ -66,6 +75,8 @@ if (process.env.NODE_ENV === "development") {
       next();
    });
 }
+
+//.
 
 //.
 //? Using GLOBAL middlewares npm packages, for app security
@@ -97,7 +108,7 @@ app.use(
    })
 );
 
-//? middleware for compression the text response from APIs
+//? middleware for compressing the text response from APIs
 app.use(compression());
 //.
 //? Mounting view (web-app) route

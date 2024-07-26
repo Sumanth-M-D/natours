@@ -90,6 +90,7 @@ const limiter = rateLimit({
    message: "Too many requests from this IP, please try again in an hour!",
 });
 app.use("/api", limiter);
+app.set("trust proxy", true);
 
 //3. Data sanitization against noSQL query injection
 app.use(ExpressMongoSanitize());

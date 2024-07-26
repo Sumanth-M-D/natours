@@ -5,6 +5,17 @@ import User from "../models/userModel.js";
 import Booking from "../models/bookingModel.js";
 
 //.
+//? alert function
+const alerts = function (req, res, next) {
+   const { alert } = req.query;
+
+   if (alert === "booking")
+      res.locals.alerts =
+         "Your booking was successful! Please check your email for a confirmation. If your booking doesn't show up immedietly, please comeback later";
+   next();
+};
+
+//.
 //? Get overview of all tours
 const getOverview = catchAsync(async function (req, res, next) {
    //Importing tours data from Tour-model
@@ -98,6 +109,7 @@ const updateUserData = catchAsync(async function (req, res) {
 //.//.
 //? Exporting controller functions as an object
 const viewsController = {
+   alerts,
    getOverview,
    getTour,
    getsignUpForm,

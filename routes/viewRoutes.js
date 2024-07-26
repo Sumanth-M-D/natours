@@ -5,6 +5,8 @@ import bookingController from "../controllers/bookingController.js";
 
 const router = Express.Router();
 
+router.use(viewsController.alerts);
+
 router.get("/", authController.isloggedIn, viewsController.getOverview);
 
 router.get(`/tour/:slug`, authController.isloggedIn, viewsController.getTour);

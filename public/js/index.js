@@ -5,6 +5,7 @@ import { login, logout } from "./login.js";
 import { signUp } from "./signUp.js";
 import { updateSettings } from "./updateSettings.js";
 import bookTour from "./stripe.js";
+import alertFunctions from "./alerts.js";
 
 //? DOM elements
 const leafletMap = document.getElementById("map");
@@ -111,3 +112,6 @@ if (bookBtn) {
       bookTour(tourId);
    });
 }
+
+const alertMessage = document.querySelector("body").dataset.alert;
+if (alert) alertFunctions.showAlert("success", alertMessage, 15);

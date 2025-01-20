@@ -3,7 +3,7 @@ export default class APIFeatures {
       this.query = query;
       this.queryObject = queryObject;
    }
-
+ 
    filter() {
       /* 1.1. FILTERING 
             (for removing advanced operations from initial query)

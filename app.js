@@ -1,6 +1,6 @@
 //? UPDATING ENVIRONMENT VARIABLES FORM CONFIG.ENV
 import dotenv from "dotenv"; /// npm i dotenv
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 
 /// console.log(process.env); //Environment variables
 
@@ -111,6 +111,7 @@ app.use(
 
 //? middleware for compressing the text response from APIs
 app.use(compression());
+
 //.
 //? Mounting view (web-app) route
 app.use("/", viewRouter);

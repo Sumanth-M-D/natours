@@ -7,8 +7,12 @@ import catchAsync from "../utils/catchAsync.js";
 import handlerFactory from "./handlerFactory.js";
 import AppError from "../utils/appError.js";
 import User from "../models/userModel.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 //.
 //? Getting the checkout session from stripe
 const getCheckoutSession = catchAsync(async function (req, res, next) {
